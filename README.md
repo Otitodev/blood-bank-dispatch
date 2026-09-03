@@ -50,7 +50,7 @@ CALL-E hackathon.
 
 ```bash
 python -m venv venv
-venv\Scripts\pip install -r requirements.txt   # or: fastapi uvicorn jinja2 asyncpg python-multipart python-dotenv calle-ai
+venv\Scripts\pip install -r requirements.txt python-dotenv calle-ai
 
 copy .env.example .env        # then fill in CALLE_API_KEY and DATABASE_URL
 
