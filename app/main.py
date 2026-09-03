@@ -263,6 +263,26 @@ async def _request_error(request: Request, message: str, form: dict):
     )
 
 
+@app.get("/runs")
+async def runs_history(request: Request):
+    runs = await db.fetch(
+        """
+        select r.*,
+               count(c.id) as targets,
+               count(c.id) filter (where c.status = 'completed') as completed,
+               count(c.id) filter (where c.status = 'no_answer') as no_answer,
+               count(c.id) filter (where c.status = 'callback_requested') as callbacks,
+               count(c.id) filter (where c.status = 'failed') as failed
+        from call_runs r
+        left join call_results c on c.run_id = r.id
+        group by r.id
+        order by r.created_at desc
+        limit 100
+        """
+    )
+    return render(request, "runs.html", runs=runs)
+
+
 @app.get("/runs/{run_id}")
 async def run_page(request: Request, run_id: uuidmod.UUID):
     run = await db.fetchrow("select * from call_runs where id = $1", run_id)
