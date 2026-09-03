@@ -14,7 +14,9 @@ from .prompt import EXTRACTION_SCHEMA, build_task  # noqa: E402
 
 _background_tasks: set[asyncio.Task] = set()
 _client: CalleClient | None = None
-DRY_RUN = os.environ.get("DRY_RUN", "0") == "1"
+# Safe by default (contribution repo principle 7): no calls unless you
+# explicitly set DRY_RUN=0.
+DRY_RUN = os.environ.get("DRY_RUN", "1") == "1"
 
 
 @dataclass

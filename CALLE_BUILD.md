@@ -101,7 +101,7 @@ Environment variables:
 CALLE_API_KEY=...
 CALLE_BASE_URL=https://api.heycall-e.com     # test env: https://test-api.heycall-e.com
 DATABASE_URL=postgresql://user:pass@host:5432/bb_dispatch
-DRY_RUN=0    # 1 = no-call mode: simulate the four mock-line personas end to end
+DRY_RUN=1    # no-call by default (contribution repo principle 7); set 0 for live calls
 ```
 
 ### Spike findings — confirmed from installed 0.7.0 source and changelog
