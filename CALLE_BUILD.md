@@ -100,6 +100,8 @@ Environment variables:
 ```
 CALLE_API_KEY=...
 CALLE_BASE_URL=https://api.heycall-e.com     # test env: https://test-api.heycall-e.com
+DATABASE_URL=postgresql://user:pass@host:5432/bb_dispatch
+DRY_RUN=0    # 1 = no-call mode: simulate the four mock-line personas end to end
 ```
 
 ### Spike findings — confirmed from installed 0.7.0 source and changelog
@@ -368,6 +370,10 @@ fragment at `GET /runs/{id}/cards` that htmx refetches every two seconds
 ---
 
 ## 8. Demo environment
+
+`DRY_RUN=1` simulates all four mock-line personas through the real pipeline —
+no calls, no spend. Use it to rehearse the UI and video blocking before
+recording against the live VAPI lines.
 
 Live calls to real blood banks are out of scope: we cannot obtain consent from
 real facilities to be test targets, and placing unsolicited automated calls to

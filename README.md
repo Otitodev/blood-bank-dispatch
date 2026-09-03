@@ -62,8 +62,12 @@ venv\Scripts\python -m uvicorn app.main:app --port 8000
 
 Open `http://localhost:8000` → New request.
 
-A run costs one paid CALL-E call per target. Test with single-target runs
-while building; save full fan-outs for integration checks and recording.
+**No real calls happen until you want them to.** With `DRY_RUN=1` the full
+pipeline runs against simulated results — safe for setup, demos, and UI work.
+Unset it to place real CALL-E calls.
+
+A real run costs one paid CALL-E call per target. Test with single-target
+runs while building; save full fan-outs for integration checks and recording.
 
 ## Environment variables
 
@@ -72,6 +76,7 @@ while building; save full fan-outs for integration checks and recording.
 | `CALLE_API_KEY` | yes | — | CALL-E API key (`iams_live_...`). Server side only; the browser gets htmx and HTML fragments, nothing else. |
 | `CALLE_BASE_URL` | no | `https://api.heycall-e.com` | API base. Test env: `https://test-api.heycall-e.com`. |
 | `DATABASE_URL` | yes | — | asyncpg Postgres DSN. |
+| `DRY_RUN` | no | `0` | `1` = no-call mode: simulates the four mock-line personas (stock, alternatives, callback, no-answer) end to end without placing calls or needing `CALLE_API_KEY`. |
 | `CALLE_CONCURRENCY` | no | `2` | Max simultaneous calls per run. Confirm your account concurrency cap before raising. |
 | `MAX_TARGETS` | no | `8` | Server-side cap on targets per run (each target is a paid call). |
 | `RATE_LIMIT_RUNS` | no | `6` | `POST /runs` per client IP per 10 minutes. |
