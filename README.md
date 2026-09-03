@@ -155,7 +155,6 @@ seed.py          # four fictional demo banks
 migrate.py       # applies migrations without psql
 _recover.py      # re-drive a row stuck in 'dialing' via idempotent replay
 calle_run.py     # the original one-call spike
-CALLE_BUILD.md   # the build guidance this repo was built from
 ```
 
 ## License
