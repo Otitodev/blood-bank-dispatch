@@ -82,6 +82,14 @@ runs while building; save full fan-outs for integration checks and recording.
 | `RATE_LIMIT_RUNS` | no | `6` | `POST /runs` per client IP per 10 minutes. |
 | `CALLE_CALL_TIMEOUT` | no | `600` | Seconds to wait for one call to reach a terminal state. |
 
+## Deploy on Railway
+
+`railpack.json` at the repo root makes this deployable on Railway with no extra config:
+
+1. Create a Railway project from your GitHub repo (root directory = repo root) and provision a **Postgres** database in the same project — Railway injects `DATABASE_URL` automatically.
+2. Deploy. The start command runs `migrate.py` (idempotent) before launching uvicorn.
+3. The app boots in no-call mode (`DRY_RUN=1`). For live calls, set `CALLE_API_KEY` and `DRY_RUN=0` in the service's variables.
+
 ## Usage
 
 - **Registry** (`/banks`) — add, edit, deactivate banks inline. Phones are
