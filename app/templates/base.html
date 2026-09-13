@@ -3,7 +3,11 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#ffffff">
 <title>Blood Bank Dispatch</title>
+<link rel="icon" type="image/png" href="/static/blood-bag.png">
+<link rel="apple-touch-icon" href="/static/blood-bag.png">
+<link rel="manifest" href="/static/manifest.webmanifest">
 <script src="/static/htmx.min.js"></script>
 <style>
   :root {
@@ -37,7 +41,12 @@
     border-bottom: 1px solid var(--border);
     font-size: 14px;
   }
-  nav .brand { font-weight: 600; letter-spacing: -0.01em; margin-right: auto; }
+  nav .brand {
+    display: inline-flex; align-items: center; gap: 0.55rem;
+    color: var(--fg); font-weight: 600; letter-spacing: -0.01em;
+    margin-right: auto; text-decoration: none;
+  }
+  nav .brand img { width: 30px; height: 30px; object-fit: contain; }
   nav a { color: var(--muted); text-decoration: none; }
   nav a:hover { color: var(--fg); }
   h1 { font-size: 1.5rem; font-weight: 600; letter-spacing: -0.02em; margin: 1.2rem 0 0.3rem; }
@@ -149,7 +158,10 @@
 </head>
 <body>
 <nav>
-  <span class="brand">Blood Bank Dispatch</span>
+  <a class="brand" href="/request">
+    <img src="/static/blood-bag.png" alt="" width="30" height="30">
+    <span>Blood Bank Dispatch</span>
+  </a>
   {% if authed %}
   <a href="/request">New request</a>
   <a href="/runs">History</a>

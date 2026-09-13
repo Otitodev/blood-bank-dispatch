@@ -1,0 +1,17 @@
+{
+  "name": "Blood Bank Dispatch",
+  "short_name": "BB Dispatch",
+  "description": "Coordinate urgent blood-stock enquiries across multiple blood banks.",
+  "start_url": "/request",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#ffffff",
+  "icons": [
+    {
+      "src": "/static/blood-bag.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ]
+}
