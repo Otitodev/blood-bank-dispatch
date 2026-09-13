@@ -7,6 +7,7 @@ from collections import defaultdict, deque
 from contextlib import asynccontextmanager
 from pathlib import Path
 
+from asyncpg import UniqueViolationError
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -36,7 +37,7 @@ from .util import mask_phone, sanitize_label  # noqa: E402
 BASE = Path(__file__).resolve().parent.parent
 templates = Jinja2Templates(directory=str(BASE / "app" / "templates"))
 
-E164 = re.compile(r"^\+[1-9]\d{7,14}$")
+E164 = re.compile(r"\+[1-9][0-9]{7,14}")
 GROUPS = ("A", "B", "AB", "O")
 RHESUS = ("positive", "negative")
 MAX_TARGETS = int(os.environ.get("MAX_TARGETS", "8"))
@@ -146,7 +147,7 @@ async def banks_page(request: Request):
 
 def _clean_phone(phone: str) -> str:
     phone = phone.strip()
-    if not E164.match(phone):
+    if not E164.fullmatch(phone):
         raise HTTPException(400, "phone must be E.164, e.g. +15550101234")
     return phone
 
@@ -182,7 +183,7 @@ async def banks_update(
     request: Request,
     bank_id: uuidmod.UUID,
     name: str = Form(...),
-    new_phone: str = Form(""),
+    phone: str = Form(""),
     area: str = Form(""),
     notes: str = Form(""),
     active: str = Form(""),
@@ -193,22 +194,25 @@ async def banks_update(
     name = _cap("name", name.strip(), NAME_MAX)
     if not name:
         raise HTTPException(400, "name is required")
-    # The phone is never rendered back into the form; a blank new_phone keeps
+    # The phone is never rendered back into the form; a blank phone keeps
     # the stored number unchanged.
     row = await db.fetchrow("select phone from banks where id = $1", bank_id)
     if row is None:
         raise HTTPException(404, "bank not found")
-    phone = _clean_phone(new_phone) if new_phone.strip() else row["phone"]
-    await db.execute(
-        "update banks set name = $2, phone = $3, area = $4, notes = $5,"
-        " active = $6 where id = $1",
-        bank_id,
-        name,
-        phone,
-        _cap("area", area.strip(), AREA_MAX) or None,
-        _cap("notes", notes.strip(), NOTES_MAX) or None,
-        active == "on",
-    )
+    cleaned_phone = _clean_phone(phone) if phone.strip() else row["phone"]
+    try:
+        await db.execute(
+            "update banks set name = $2, phone = $3, area = $4, notes = $5,"
+            " active = $6 where id = $1",
+            bank_id,
+            name,
+            cleaned_phone,
+            _cap("area", area.strip(), AREA_MAX) or None,
+            _cap("notes", notes.strip(), NOTES_MAX) or None,
+            active == "on",
+        )
+    except UniqueViolationError as exc:
+        raise HTTPException(409, "phone already belongs to another bank") from exc
     return RedirectResponse("/banks", status_code=303)
 
 
@@ -292,7 +296,7 @@ async def create_run(
                 errors.append("one or more selected banks are unavailable")
 
     adhoc_phone = adhoc_phone.strip()
-    if adhoc_phone and not E164.match(adhoc_phone):
+    if adhoc_phone and not E164.fullmatch(adhoc_phone):
         errors.append("ad hoc number must be E.164, e.g. +15550101234")
     if len(adhoc_label.strip()) > LABEL_MAX:
         errors.append(f"label is limited to {LABEL_MAX} characters")

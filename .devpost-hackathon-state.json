@@ -1,0 +1,40 @@
+{
+  "plugin": "devpost-hackathon",
+  "version": 2,
+  "hackathon": {
+    "slug": "call-e",
+    "name": "CALL-E: Your Code Is Calling",
+    "url": "https://call-e.devpost.com",
+    "selected": true,
+    "source": "search"
+  },
+  "participant": {
+    "name": "",
+    "display_name": ""
+  },
+  "project": {
+    "name": "Blood Bank Dispatch",
+    "summary": "A CALL-E phone agent that checks multiple blood banks and returns a ranked, auditable stock shortlist for qualified clinic staff.",
+    "ai_usage": "CALL-E conducts authorized mock-line calls and extracts stock, release, screening, transport, cost, contact, callback, and alternative data into a strict schema.",
+    "codex_usage": "Codex helped plan, implement, harden, test, and document the FastAPI/Postgres application and prepare its demo and Devpost materials."
+  },
+  "current_stage": "prepare-submission",
+  "completed_stages": [
+    "start-hackathon",
+    "review",
+    "resources"
+  ],
+  "rules_acknowledged": true,
+  "learning": {
+    "status": "not-started",
+    "current_step": "",
+    "completed_steps": [],
+    "plan_file": "",
+    "checklist_file": ""
+  },
+  "submission": {
+    "draft_file": "devpost-submission.md",
+    "status": "drafting"
+  },
+  "next_command": "prepare-submission"
+}
